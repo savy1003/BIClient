@@ -1,0 +1,604 @@
+﻿@{
+    Layout = null;
+}
+<style>
+    .posting {
+        /*max-height: 350px;
+                        display: block;
+                        width: 100%;
+                        table-layout: fixed;*/
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .posting-scroll tbody {
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .posting-scroll tr {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .posting-scroll td {
+        height: 47px;
+    }
+
+    .posting1 {
+        /*max-height: 350px;
+                        display: block;
+                        width: 100%;
+                        table-layout: fixed;*/
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .posting1-scroll tbody {
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .posting1-scroll tr {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .posting1-scroll td {
+        height: 47px;
+    }
+
+    .row-id {
+        width: 5%;
+    }
+
+    .row-Description {
+        width: 47%;
+    }
+
+    .row-Qty {
+        width: 20%;
+    }
+
+    .row-Action {
+        width: 20%;
+    }
+
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    .posting th {
+        background: #4ab5dd;
+        color: white;
+    }
+
+    .posting td,
+    .posting th {
+        text-align: left;
+        padding: 5px 10px;
+    }
+
+    .posting tr:nth-child(even) {
+        background: #fff;
+    }
+
+    .posting1 th {
+        background: #4ab5dd;
+        color: white;
+    }
+
+    .posting1 td,
+    .posting1 th {
+        text-align: left;
+        padding: 5px 10px;
+    }
+
+    .posting1 tr:nth-child(even) {
+        background: #fff;
+    }
+
+    th {
+        background-color: #e9573f !important;
+        color: #ffffff;
+    }
+</style>
+
+<section class="content" ng-init="ctrl.onInit(1)">
+    <!--display list of Target-->
+    <div ng-show="ctrl.listPlan">
+        <div class="panel box-solid">
+            <div class="col-lg-12">
+                <div class="form-inline">
+                    <h5>
+                        <input type="file" name="file" class="form-control"
+                               onchange="angular.element(this).scope().UploadFile(this.files)" style="    background: red;color: white;border-radius: 5px;" />
+                        <input type="button" value="Upload" class="btn btn-success" ng-disabled="!SelectedFileForUpload"
+                               ng-click="ParseExcelDataAndSave()" style="opacity: 2; background: red; border: red; border-radius: 5px;" />
+
+                        <button ng-show="canAdd" class="btn btn-rounded btn-danger pull-right" data-ng-click="ctrl.onAdd()">
+                            Update
+                        </button>
+                    </h5>
+                   
+                </div>
+            </div>
+            <div id="exportable">
+                <table class="table table-striped dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN DATE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL2 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL3 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">STORE CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL2 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL3 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL4 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL5 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRODUCT CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN VERSION</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN SALE_QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN SALE VALAT PRICE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN SALE VAL AT COST</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN MARKDOWN QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN MARKDOWN VAL</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN SHRINKAGE VAL</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN PURCHASE QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN PURCHASE VAL</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN INV OPENING QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OPENING VAL AT COST</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OPENING VAL AT PRICE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH1</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH2</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH3</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH4</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH5</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">ARC DATE</th>
+
+                    </tr>
+                    <tr ng-show="ctrl.PlanList.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="Plan in ctrl.PlanList  |itemsPerPage: ctrl.itemsPerPage | filter:PlanList:strict" total-items="ctrl.totalCountAll">
+
+                        <td>{{Plan.PLAN_DATE | date:'MM/dd/yyyy'}}</td>
+                        <td>{{Plan.GEO_LEVEL1_CODE}}</td>
+                        <td>{{Plan.GEO_LEVEL2_CODE}}</td>
+                        <td>{{Plan.GEO_LEVEL3_CODE}}</td>
+                        <td>{{Plan.STORE_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL1_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL2_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL3_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL4_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL5_CODE}}</td>
+                        <td>{{Plan.PRODUCT_CODE}}</td>
+                        <td>{{Plan.PLAN_VERSION}}</td>
+                        <td>{{Plan.PLAN_SALE_QTY}}</td>
+                        <td>{{Plan.PLAN_SALE_VAL_AT_PRICE}}</td>
+                        <td>{{Plan.PLAN_SALE_VAL_AT_COST}}</td>
+                        <td>{{Plan.PLAN_MARKDOWN_QTY}}</td>
+                        <td>{{Plan.PLAN_MARKDOWN_VAL}}</td>
+                        <td>{{Plan.PLAN_SHRINKAGE_VAL}}</td>
+                        <td>{{Plan.PLAN_PURCHASE_QTY}}</td>
+                        <td>{{Plan.PLAN_PURCHASE_VAL}}</td>
+                        <td>{{Plan.PLAN_INV_OPENING_QTY}}</td>
+                        <td>{{Plan.PLAN_OPENING_VAL_AT_COST}}</td>
+                        <td>{{Plan.PLAN_OPENING_VAL_AT_PRICE}}</td>
+                        <td>{{Plan.PLAN_OTH1}}</td>
+                        <td>{{Plan.PLAN_OTH2}}</td>
+                        <td>{{Plan.PLAN_OTH3}}</td>
+                        <td>{{Plan.PLAN_OTH4}}</td>
+                        <td>{{Plan.PLAN_OTH5}}</td>
+                        <td>{{Plan.ARC_DATE | date:'MM/dd/yyyy'}}</td>
+</table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="PlanList.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Button1').click(function () {
+                location.reload();
+            });
+        });
+    </script>
+    <div ng-show="!ctrl.listPlan">
+        <div class="col-lg-12">
+            @*<a href="#" data-ng-click="ctrl.back()"><span class="btn-lg glyphicons glyphicons-rewind "></span></a>*@
+            <button id="Button1" ng-show="canAdd" class="btn btn-rounded btn-danger pull-right" data-ng-click="ctrl.back()">
+                <span class="btn-lg glyphicons glyphicons-rewind " style="left:-6px;"></span>
+            </button>
+            <div class="section row mb10">
+                <label style="margin-left:10px">PLAN DATE</label>
+                <label for="footfall-date" id="footfalldate" class="field prepend-icon" style="text-align:center">
+                    <input placeholder="Select Date . . ." type="text" ng-click="ctrl.SelectedMonth(plan)" ng-model="ctrl.objPlan.PLAN_DATE" id="datetimepicker1" style="text-align:center">
+                </label>
+                @*Site Code*@
+                <div class="col-md-4" style="width:20%">
+                    <div class="input-group date">
+                        <input id="idSite" type="text"
+                               class="form-control"
+                               placeholder="Select Store"
+                               ng-model="ctrl.objPlan.SiteDesc"
+                               ng-disabled="true">
+                        <span class="input-group-addon" ng-disabled="ctrl.viewOnly" ng-click="ctrl.showSite(site)">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-rounded btn-danger btn-sm " data-ng-click="ctrl.SearchPlan(searchPlan)">&nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;&nbsp;</button>
+
+            </div>
+
+            @*Plan Date: &nbsp;&nbsp;&nbsp; <input ng-model="ctrl.strSearch" type="text" ng-disabled="true" />*@
+
+            <div id="exportable">
+                <table class="table table-striped dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">EDIT</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN DATE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL2 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL3 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">STORE CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL2 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL3 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL4 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL5 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRODUCT CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN VERSION</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN SALE_QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN SALE VALAT PRICE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN SALE VAL AT COST</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN MARKDOWN QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN MARKDOWN VAL</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN SHRINKAGE VAL</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN PURCHASE QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN PURCHASE VAL</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN INV OPENING QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OPENING VAL AT COST</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OPENING VAL AT PRICE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH1</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH2</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH3</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH4</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PLAN OTH5</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">ARC DATE</th>
+
+                    </tr>
+                    @*<tr ng-show="ctrl.
+                        .length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>*@
+                    <tr ng-show="ctrl.PlanList1.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="Plan in ctrl.PlanList1  |itemsPerPage: ctrl.itemsPerPage   | filter:PlanList:strict" total-items="ctrl.totalCountPlan">
+
+                        <td>
+                            <a class="pointer text-danger-dark" ng-show="canEdit" ng-click="ctrl.onEditMst(Plan)">
+                                <span class="glyphicons glyphicons-edit"></span>
+                            </a>
+                        </td>
+
+                        <td>{{Plan.PLAN_DATE | date:'MM/dd/yyyy'}}</td>
+                        <td>{{Plan.GEO_LEVEL1_CODE}}</td>
+                        <td>{{Plan.GEO_LEVEL2_CODE}}</td>
+                        <td>{{Plan.GEO_LEVEL3_CODE}}</td>
+                        <td>{{Plan.STORE_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL1_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL2_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL3_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL4_CODE}}</td>
+                        <td>{{Plan.PROD_LEVEL5_CODE}}</td>
+                        <td>{{Plan.PRODUCT_CODE}}</td>
+                        <td>{{Plan.PLAN_VERSION}}</td>
+                        <td>{{Plan.PLAN_SALE_QTY}}</td>
+                        <td>{{Plan.PLAN_SALE_VAL_AT_PRICE}}</td>
+                        <td>{{Plan.PLAN_SALE_VAL_AT_COST}}</td>
+                        <td>{{Plan.PLAN_MARKDOWN_QTY}}</td>
+                        <td>{{Plan.PLAN_MARKDOWN_VAL}}</td>
+                        <td>{{Plan.PLAN_SHRINKAGE_VAL}}</td>
+                        <td>{{Plan.PLAN_PURCHASE_QTY}}</td>
+                        <td>{{Plan.PLAN_PURCHASE_VAL}}</td>
+                        <td>{{Plan.PLAN_INV_OPENING_QTY}}</td>
+                        <td>{{Plan.PLAN_OPENING_VAL_AT_COST}}</td>
+                        <td>{{Plan.PLAN_OPENING_VAL_AT_PRICE}}</td>
+                        <td>{{Plan.PLAN_OTH1}}</td>
+                        <td>{{Plan.PLAN_OTH2}}</td>
+                        <td>{{Plan.PLAN_OTH3}}</td>
+                        <td>{{Plan.PLAN_OTH4}}</td>
+                        <td>{{Plan.PLAN_OTH5}}</td>
+                        <td>{{Plan.ARC_DATE | date:'MM/dd/yyyy'}}</td>
+
+</table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="PlanList1.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.processSearch(NewPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+
+</section>
+<div id="modal-panelMaintenananceList" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <!--Modal Header-->
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Site List</span>
+        </div>
+        <div class="panel-body" style="height:450px">
+            <div class='form-group form-group-sm'>
+                <input type='text' placeholder="Enter Site..." class='form-control' ng-model="ctrl.SiteTxt">
+            </div>
+            <div style="overflow:scroll; height:400px;">
+                <table class="table table-hover dataTable no-footer" context-menu data-target="menu-table">
+                    <tr>
+                        <th>Description</th>
+                    </tr>
+                    <tr ng-repeat="site in ctrl.siteList | filter:ctrl.SiteTxt">
+                        <td ng-click="ctrl.SelectedSite(site)">{{site.Description}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-danger" type="submit" data-ng-click="ctrl.Cancel()">Close</button>
+        </div>
+    </div>
+</div>
+<div id="modal-panelMaintenance" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <!--Modal Header-->
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Update PLan</span>
+        </div>
+        <div class="panel-body" style="height:450px; overflow-y:scroll">
+            <form class="form-horizontal" role="form">
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">ID</label>
+                    <div class="col-md-4">
+                        <input id="idID" ng-enter="ctrl.keyDidID" ng-disabled="true" type="text" ng-model="ctrl.objPlan.ID " /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN DATE</label>
+                    <div class="col-md-4">
+                        <input id="idPDate" ng-enter="ctrl.keyDidPDate" ng-disabled="true" type="text" ng-model="ctrl.objPlan.PLAN_DATE " /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">GEO LEVEL1 CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPGeo1" ng-enter="ctrl.keyDidPGeo1" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.GEO_LEVEL1_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">GEO LEVEL2 CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPGeo2" ng-enter="ctrl.keyDidPGeo2" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.GEO_LEVEL2_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">GEO LEVEL3 CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPGeo3" ng-enter="ctrl.keyDidPGeo3" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.GEO_LEVEL3_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">STORE CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPStore" ng-enter="ctrl.keyDidPStore" ng-disabled="true" type="text" ng-model="ctrl.objPlan.STORE_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PROD LEVEL1 CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPProd1" ng-enter="ctrl.keyDidPProd1" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PROD_LEVEL1_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PROD LEVEL2 CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPProd2" ng-enter="ctrl.keyDidPProd2" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PROD_LEVEL2_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PROD LEVEL3 CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPProd3" ng-enter="ctrl.keyDidPProd3" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PROD_LEVEL3_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PROD LEVEL4 CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPProd4" ng-enter="ctrl.keyDidPProd4" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PROD_LEVEL4_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PROD LEVEL5 CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPProd5" ng-enter="ctrl.keyDidPProd5" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PROD_LEVEL5_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PRODUCT CODE</label>
+                    <div class="col-md-4">
+                        <input id="idPDate" ng-enter="ctrl.keyDidPDate" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PRODUCT_CODE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN VERSION</label>
+                    <div class="col-md-4">
+                        <input id="idPProduct" ng-enter="ctrl.keyDidPProduct" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_VERSION" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN SALE QTY</label>
+                    <div class="col-md-4">
+                        <input id="idPSaleQty" ng-enter="ctrl.keyDidPSaleQty" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_SALE_QTY " /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN SALE VAL AT PRICE</label>
+                    <div class="col-md-4">
+                        <input id="idPSaleVatPrice" ng-enter="ctrl.keyDidPSaleVatPrice" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_SALE_VAL_AT_PRICE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN SALE VAL AT COST</label>
+                    <div class="col-md-4">
+                        <input id="idPSaleVatCost" ng-enter="ctrl.keyDidPSaleVatCost" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_SALE_VAL_AT_COST " /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN MARKDOWN QTY</label>
+                    <div class="col-md-4">
+                        <input id="idPMarkdownQty" ng-enter="ctrl.keyDidPMarkdownQty" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_MARKDOWN_QTY" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN MARKDOWN VAL</label>
+                    <div class="col-md-4">
+                        <input id="idPMarkdownVal" ng-enter="ctrl.keyDidPMarkdownVal" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_MARKDOWN_VAL " /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN SHRINKAGE VAL</label>
+                    <div class="col-md-4">
+                        <input id="idPShrinkVal" ng-enter="ctrl.keyDidPShrinkVal" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_SHRINKAGE_VAL" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN PURCHASE QTY</label>
+                    <div class="col-md-4">
+                        <input id="idPPurchaseQty" ng-enter="ctrl.keyDidPPurchaseQty" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_PURCHASE_QTY" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN PURCHASE VAL</label>
+                    <div class="col-md-4">
+                        <input id="idPPurchaseVal" ng-enter="ctrl.keyDidPPurchaseVal" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_PURCHASE_VAL" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN INV OPENING QTY</label>
+                    <div class="col-md-4">
+                        <input id="idPInvOpenQty" ng-enter="ctrl.keyDidPInvOpenQty" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_INV_OPENING_QTY" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN OPENING VAL AT COST</label>
+                    <div class="col-md-4">
+                        <input id="idPOpenValCost" ng-enter="ctrl.keyDidPOpenValCost" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_OPENING_VAL_AT_COST" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN OPENING VAL AT PRICE</label>
+                    <div class="col-md-4">
+                        <input id="idPOpenValPrice" ng-enter="ctrl.keyDidPOpenValPrice" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_OPENING_VAL_AT_PRICE" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN OTH1</label>
+                    <div class="col-md-4">
+                        <input id="idPOth1" ng-enter="ctrl.keyDidPOth1" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_OTH1" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN OTH2</label>
+                    <div class="col-md-4">
+                        <input id="idPOth2" ng-enter="ctrl.keyDidPOth2" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_OTH2" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN OTH3</label>
+                    <div class="col-md-4">
+                        <input id="idPOth3" ng-enter="ctrl.keyDidPOth3" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_OTH3" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN OTH4</label>
+                    <div class="col-md-4">
+                        <input id="idPOth4" ng-enter="ctrl.keyDidPOth4" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_OTH4" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">PLAN OTH5</label>
+                    <div class="col-md-4">
+                        <input id="idPOth5" ng-enter="ctrl.keyDidPOth5" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objPlan.PLAN_OTH5" /> </br>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-md-3 control-label small">ARC DATE</label>
+                    <div class="col-md-4">
+                        <input id="idPArcDate" ng-enter="ctrl.keyDidPArcDate" ng-disabled="true" type="text" ng-model="ctrl.objPlan.ARC_DATE" /> </br>
+                    </div>
+                </div>
+                <button class='btn btn-primary pull-right' ng-disabled="ctrl.viewOnly" ng-show="ctrl.btnSave" ng-click="ctrl.Save()">Save</button>
+                <button class='btn btn-primary pull-right' ng-disabled="ctrl.viewOnly" ng-show="ctrl.btnUpdate" ng-click="ctrl.Update()">Update</button>
+            </form>
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-danger" type="submit" data-ng-click="ctrl.Cancel()">Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-panelMaintenance1" class="popup-basic bg-none mfp-with-anim mfp-hide" style="max-width:60%;">
+    <div class="panel">
+        <!--Modal Header-->
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Month List</span>
+        </div>
+        <div class="panel-body" style="overflow-y: scroll; max-height:85%;">
+            @*<div class='form-group form-group-sm'>
+                <div class='col-md-6'>
+                    <input type='text' placeholder=" type inv no..." class='form-control' ng-model="ctrl.invListTxt">
+        </div>
+                <button class='btn btn-primary' type='submit' ng-click='ctrl.SearchInv()'>Search</button>
+
+            </div>*@
+
+            @*<table  ng-controller="ctrlPlan" ng-click="ctrl.SelectedMonth(plan)" class="table table-striped table-hover dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+       
+                <tr ng-model ="date">
+                    <td>January</td>
+                    <td ng-show="!date">{{Month.january}}</td>
+                </tr>
+                <tr>
+                    <td>February</td>
+                    <td>{{Month.february}}</td>
+                </tr>
+                <tr>
+                    <td>March</td>
+                    <td>{{Month.march}} </td>
+
+                </tr>
+            </table>*@
+          
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-primary" type="submit" data-ng-click="ctrl.Close()">Close</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,332 @@
+﻿@{
+    Layout = null;
+}
+<style>
+    .posting {
+        /*max-height: 350px;
+                        display: block;
+                        width: 100%;
+                        table-layout: fixed;*/
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .posting-scroll tbody {
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .posting-scroll tr {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .posting-scroll td {
+        height: 47px;
+    }
+
+    .posting1 {
+        /*max-height: 350px;
+                        display: block;
+                        width: 100%;
+                        table-layout: fixed;*/
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .posting1-scroll tbody {
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .posting1-scroll tr {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .posting1-scroll td {
+        height: 47px;
+    }
+
+    .row-id {
+        width: 5%;
+    }
+
+    .row-Description {
+        width: 47%;
+    }
+
+    .row-Qty {
+        width: 20%;
+    }
+
+    .row-Action {
+        width: 20%;
+    }
+
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    .posting th {
+        background: #4ab5dd;
+        color: white;
+    }
+
+    .posting td,
+    .posting th {
+        text-align: left;
+        padding: 5px 10px;
+    }
+
+    .posting tr:nth-child(even) {
+        background: #fff;
+    }
+
+    .posting1 th {
+        background: #4ab5dd;
+        color: white;
+    }
+
+    .posting1 td,
+    .posting1 th {
+        text-align: left;
+        padding: 5px 10px;
+    }
+
+    .posting1 tr:nth-child(even) {
+        background: #fff;
+    }
+
+    th {
+        background-color: #e9573f !important;
+        color: #ffffff;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Button1').click(function () {
+            location.reload();
+        });
+    });
+</script>
+
+<section class="content" ng-init="ctrl.onInit(1)">
+    <!--display list of Target-->
+    <div ng-show="ctrl.listPrice">
+        <div class="panel box-solid">
+            <div class="col-lg-12">
+                <div class="form-inline">
+                    <h5>
+                        <input type="file" name="file" class="form-control"
+                               onchange="angular.element(this).scope().UploadFile(this.files)" style="    background: red;color: white;border-radius: 5px;" />
+                        <input type="button" value="Upload" class="btn btn-success" ng-disabled="!SelectedFileForUpload"
+                               ng-click="ParseExcelDataAndSave()" style="opacity: 2; background: red; border: red; border-radius: 5px;" />
+
+                        <button ng-show="canAdd" class="btn btn-rounded btn-danger pull-right" data-ng-click="ctrl.onView()">
+                            Update
+                        </button>
+                    </h5>
+                </div>
+            </div>
+            <div id="exportable">
+                <table class="table table-striped dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND DESC</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND LOWER</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND UPPER</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND SEQ</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">ARC DATE</th>
+
+                    </tr>
+                    <tr ng-show="ctrl.PriceList.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="Price in ctrl.PriceList  |itemsPerPage: ctrl.itemsPerPage | filter:search:strict" total-items="ctrl.totalCount">
+
+                        <td>{{Price.PRICE_BAND_CODE }}</td>
+                        <td>{{Price.PRICE_BAND_DESC}}</td>
+                        <td>{{Price.PROD_LEVEL1_CODE}}</td>
+                        <td>{{Price.PRICE_BAND_LOWER}}</td>
+                        <td>{{Price.PRICE_BAND_UPPER}}</td>
+                        <td>{{Price.PRICE_BAND_SEQ}}</td>
+                        <td>{{Price.ARC_DATE | date:'MM/dd/yyyy' }}</td>
+                </table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+    <div ng-show="!ctrl.listPrice">
+        <div class="col-lg-12">
+            @*<a href="#" data-ng-click="ctrl.back()"><span class="btn-lg glyphicons glyphicons-rewind "></span></a>*@
+            <button id="Button1" ng-show="canAdd" class="btn btn-rounded btn-danger pull-right" data-ng-click="ctrl.back()">
+                <span class="btn-lg glyphicons glyphicons-rewind " style="left:-6px;"></span>
+            </button>
+            <div class="section row mb10">
+                <label class="col-md-3" style="width:8%">LEVEL CODE</label>
+
+                <input id="idSite" placeholder="Enter the code. . ." ng-model="ctrl.objPriceBand.lCode" type="text" ng-enter="ctrl.KeyDownSearch(ctrl.lcode)" style="text-align:center;border-radius:5px; margin-top:5px" />
+                <button type="button" class="btn btn-rounded btn-danger btn-sm " data-ng-click="ctrl.PricebandSearch()"><span class="glyphicon glyphicon-search"></span></button>
+            </div>
+
+            <div id="exportable">
+                <table class="table table-striped dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">EDIT</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND DESC</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND LOWER</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND UPPER</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRICE BAND SEQ</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">ARC DATE</th>
+
+                    </tr>
+                    @*<tr ng-show="ctrl.PlanList.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>*@
+                    <tr ng-show="ctrl.PriceList1.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="PriceBand in ctrl.PriceList1  |itemsPerPage: ctrl.itemsPerPage | filter:search:strict" total-items="ctrl.totalprice">
+
+                        <td>
+                            <a class="pointer text-danger-dark" ng-show="canEdit" ng-click="ctrl.onEditMst(PriceBand)">
+                                <span class="glyphicons glyphicons-edit"></span>
+                            </a>
+                        </td>
+                        <td>{{PriceBand.PROD_LEVEL1_CODE}}</td>
+                        <td>{{PriceBand.PRICE_BAND_CODE }}</td>
+                        <td>{{PriceBand.PRICE_BAND_DESC}}</td>
+                        <td>{{PriceBand.PRICE_BAND_LOWER}}</td>
+                        <td>{{PriceBand.PRICE_BAND_UPPER}}</td>
+                        <td>{{PriceBand.PRICE_BAND_SEQ}}</td>
+                        <td>{{PriceBand.ARC_DATE | date:'MM/dd/yyyy' }}</td>
+                    </tr>
+                </table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.processSearch(newPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+    <div id="modal-panelMaintenance" class="popup-basic bg-none mfp-with-anim mfp-hide">
+        <div class="panel">
+            <!--Modal Header-->
+            <div class="panel-heading">
+                <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Update Price Band</span>
+            </div>
+            <div class="panel-body" style="height:450px; overflow-y:scroll">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">ID</label>
+                        <div class="col-md-4">
+                            <input id="idID" ng-enter="ctrl.keyDidID" ng-disabled="true" type="text" ng-model="ctrl.objPriceBand.ID " /> </br>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PRICE BAND CODE</label>
+                        <div class="col-md-4">
+                            <input id="idCode" ng-enter="ctrl.keyDidCode" ng-disabled="true" type="text" ng-model="ctrl.objPriceBand.PRICE_BAND_CODE" /> </br>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PRICE BAND DESC</label>
+                        <div class="col-md-4">
+                            <input id="idPProd1" ng-enter="ctrl.keyDidPProd1" ng-disabled="true" type="text" ng-model="ctrl.objPriceBand.PRICE_BAND_DESC" /> </br>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PROD LEVEL1 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idPProd2" ng-enter="ctrl.keyDidPProd2" ng-disabled="true" type="text" ng-model="ctrl.objPriceBand.PROD_LEVEL1_CODE" /> </br>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PRICE BAND LOWER</label>
+                        <div class="col-md-4">
+                            <input id="idGeo2" ng-enter="ctrl.keyDidGeo2" ng-disabled="false" type="text" ng-model="ctrl.objPriceBand.PRICE_BAND_LOWER" /> </br>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PRICE BAND UPPER</label>
+                        <div class="col-md-4">
+                            <input id="idGeo3" ng-enter="ctrl.keyDidGeo3" ng-disabled="false" type="text" ng-model="ctrl.objPriceBand.PRICE_BAND_UPPER" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PRICE BAND SEQ</label>
+                        <div class="col-md-4">
+                            <input id="priceseq" ng-enter="ctrl.keyDpriceseq" ng-disabled="true" type="text" ng-model="ctrl.objPriceBand.PRICE_BAND_SEQ" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">ARC DATE</label>
+                        <div class="col-md-4">
+                            <input id="pricArc" ng-enter="ctrl.keyDpricArc" ng-disabled="true" type="text" ng-model="ctrl.objPriceBand.ARC_DATE" /> </br>
+                        </div>
+                    </div>
+                    <button class='btn btn-primary pull-right' ng-disabled="ctrl.viewOnly" ng-show="ctrl.btnSave" ng-click="ctrl.Save()">Save</button>
+                    <button class='btn btn-primary pull-right' ng-disabled="ctrl.viewOnly" ng-show="ctrl.btnUpdate" ng-click="ctrl.Update()">Update</button>
+                </form>
+            </div>
+            <div class="panel-footer text-right">
+                <button class="btn btn-danger" type="submit" data-ng-click="ctrl.Cancel()">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+    <div id="modal-panelMaintenananceList" class="popup-basic bg-none mfp-with-anim mfp-hide" style="max-width:30%;">
+        <div class="panel">
+            <!--Modal Header-->
+            <div class="panel-heading">
+                <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Site List</span>
+            </div>
+            <div class="panel-body" style="height:450px">
+                <div class='form-group form-group-sm'>
+                    <input type='text' placeholder="Enter Site..." class='form-control' ng-model="ctrl.SiteTxt">
+                </div>
+                <div style="overflow:scroll; height:400px;">
+                    <table class="table table-hover dataTable no-footer" context-menu data-target="menu-table">
+                        <tr>
+                            <th>Description</th>
+                        </tr>
+                        <tr ng-repeat="site in ctrl.siteList | filter:ctrl.SiteTxt">
+                            <td ng-click="ctrl.SelectedSite(site)">{{site.Description}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <button class="btn btn-danger" type="submit" data-ng-click="ctrl.Cancel()">Close</button>
+            </div>
+        </div>
+    </div>
+  

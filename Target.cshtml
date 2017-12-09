@@ -1,0 +1,422 @@
+﻿@{
+    Layout = null;
+}
+<style>
+    .posting {
+        /*max-height: 350px;
+                        display: block;
+                        width: 100%;
+                        table-layout: fixed;*/
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .posting-scroll tbody {
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .posting-scroll tr {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .posting-scroll td {
+        height: 47px;
+    }
+
+    .posting1 {
+        /*max-height: 350px;
+                        display: block;
+                        width: 100%;
+                        table-layout: fixed;*/
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .posting1-scroll tbody {
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .posting1-scroll tr {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .posting1-scroll td {
+        height: 47px;
+    }
+
+    .row-id {
+        width: 5%;
+    }
+
+    .row-Description {
+        width: 47%;
+    }
+
+    .row-Qty {
+        width: 20%;
+    }
+
+    .row-Action {
+        width: 20%;
+    }
+
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    .posting th {
+        background: #4ab5dd;
+        color: white;
+    }
+
+    .posting td,
+    .posting th {
+        text-align: left;
+        padding: 5px 10px;
+    }
+
+    .posting tr:nth-child(even) {
+        background: #fff;
+    }
+
+    .posting1 th {
+        background: #4ab5dd;
+        color: white;
+    }
+
+    .posting1 td,
+    .posting1 th {
+        text-align: left;
+        padding: 5px 10px;
+    }
+
+    .posting1 tr:nth-child(even) {
+        background: #fff;
+    }
+
+    th {
+        background-color: #e9573f !important;
+        color: #ffffff;
+    }
+</style>
+
+<section class="content" ng-init="ctrl.onInit(1)">
+    <!--display list of Target-->
+    <div ng-show="ctrl.listTarget">
+        <div class="panel box-solid">
+            <div class="col-lg-12">
+                <div class="form-inline">
+                    <h5>
+                        <input ng-click="reset()" id="control" type="file" name="file" class="form-control"
+                               onchange="angular.element(this).scope().UploadFile(this.files)" style="background: red;color: white;border-radius: 5px;" />
+                        <input type="button" value="Upload" class="btn btn-success" ng-disabled="!SelectedFileForUpload"
+                               ng-click="ParseExcelDataAndSave()" style="opacity: 2; background: red; border: red; border-radius: 5px;" />
+                        <button ng-show="canAdd" class="btn btn-rounded btn-danger pull-right" data-ng-click="ctrl.onAdd()">
+                            Update
+                        </button>
+                    </h5>
+                </div>
+            </div>
+            <div id="exportable">
+                <table class="table table-striped dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">TARGET DATE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL2 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL3 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">STORE CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL2 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL3 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL4 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL5 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRODUCT CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">TARGET SALE QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">TARGET SALE VAL AT PRICE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">TARGET SALE VAL AT COST</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">ARC DATE</th>
+
+                    </tr>
+                    <tr ng-show="ctrl.TargetList.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="Target in ctrl.TargetList  |itemsPerPage: ctrl.itemsPerPage | filter:search:strict" total-items="ctrl.totalCount">
+
+                        <td>{{Target.TARGET_DATE | date:'MM/dd/yyyy'}}</td>
+                        <td>{{Target.GEO_LEVEL1_CODE}}</td>
+                        <td>{{Target.GEO_LEVEL2_CODE}}</td>
+                        <td>{{Target.GEO_LEVEL3_CODE}}</td>
+                        <td>{{Target.STORE_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL1_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL2_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL3_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL4_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL5_CODE}}</td>
+                        <td>{{Target.PRODUCT_CODE}}</td>
+                        <td>{{Target.TARGET_SALE_QTY}}</td>
+                        <td>{{Target.TARGET_SALE_VAL_AT_PRICE}}</td>
+                        <td>{{Target.TARGET_SALE_VAL_AT_COST}}</td>
+                        <td>{{Target.ARC_DATE | date:'MM/dd/yyyy'}}</td>
+
+                </table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Button1').click(function () {
+                location.reload();
+            });
+        });
+    </script>
+    <div ng-show="!ctrl.listTarget">
+        <div class="col-lg-12">
+            @*<a href="#" data-ng-click="ctrl.back()"><span class="btn-lg glyphicons glyphicons-rewind "></span></a>*@
+            <button id="Button1" ng-show="canAdd" class="btn btn-rounded btn-danger pull-right" data-ng-click="ctrl.back()">
+                <span class="btn-lg glyphicons glyphicons-rewind " style="left:-6px;"></span>
+            </button>
+            <div class="section row mb10">
+                <label style="margin-left:10px">TARGET DATE</label>
+                <label for="footfall-date" id="footfalldate" class="field prepend-icon" style="text-align:center">
+                    <input placeholder="Select Date . . ." type="text" ng-click="ctrl.SelectedMonth(target)" ng-model="ctrl.objTarget.TARGET_DATE" id="datetimepicker1" style="text-align:center">
+                </label>
+                @*Site Code*@
+                <div class="col-md-4" style="width:20%">
+                    <div class="input-group date">
+                        <input id="idSite" type="text"
+                               class="form-control"
+                               placeholder="Select Store . . ."
+                               ng-model="ctrl.objTarget.SiteDesc"
+                               ng-disabled="true">
+                        <span class="input-group-addon" ng-disabled="ctrl.viewOnly" ng-click="ctrl.showSite(site)">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-rounded btn-danger btn-sm " data-ng-click="ctrl.processSearch()">&nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </div>
+            <div id="exportable">
+                <table class="table table-striped dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">EDIT</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">TARGET DATE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL2 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">GEO LEVEL3 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">STORE CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL1 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL2 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL3 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL4 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PROD LEVEL5 CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">PRODUCT CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">TARGET SALE QTY</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">TARGET SALE VAL AT PRICE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">TARGET SALE VAL AT COST</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">ARC DATE</th>
+
+                    </tr>
+                    @*<tr ng-show="ctrl.PlanList.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>*@
+                    <tr ng-show="ctrl.TargetList1.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="Target in ctrl.TargetList1  |itemsPerPage: ctrl.itemsPerPage | filter:search:strict" total-items="ctrl.totalCount1">
+
+                        <td>
+                            <a class="pointer text-danger-dark" ng-show="canEdit" ng-click="ctrl.onEditMst(Target)">
+                                <span class="glyphicons glyphicons-edit"></span>
+                            </a>
+                        </td>
+                        <td>{{Target.TARGET_DATE | date:'MM/dd/yyyy'}}</td>
+                        <td>{{Target.GEO_LEVEL1_CODE}}</td>
+                        <td>{{Target.GEO_LEVEL2_CODE}}</td>
+                        <td>{{Target.GEO_LEVEL3_CODE}}</td>
+                        <td>{{Target.STORE_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL1_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL2_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL3_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL4_CODE}}</td>
+                        <td>{{Target.PROD_LEVEL5_CODE}}</td>
+                        <td>{{Target.PRODUCT_CODE}}</td>
+                        <td>{{Target.TARGET_SALE_QTY}}</td>
+                        <td>{{Target.TARGET_SALE_VAL_AT_PRICE}}</td>
+                        <td>{{Target.TARGET_SALE_VAL_AT_COST}}</td>
+                        <td>{{Target.ARC_DATE | date:'MM/dd/yyyy'}}</td>
+
+</table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+
+    <div id="modal-panelMaintenananceList" class="popup-basic bg-none mfp-with-anim mfp-hide">
+        <div class="panel">
+            <!--Modal Header-->
+            <div class="panel-heading">
+                <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Site List</span>
+            </div>
+            <div class="panel-body" style="height:450px">
+                <div class='form-group form-group-sm'>
+                    <input type='text' placeholder="Enter Site..." class='form-control' ng-model="ctrl.SiteTxt">
+                </div>
+                <div style="overflow:scroll; height:400px;">
+                    <table class="table table-hover dataTable no-footer" context-menu data-target="menu-table">
+                        <tr>
+                            <th>Description</th>
+                        </tr>
+                        <tr ng-repeat="site in ctrl.siteList | filter:ctrl.SiteTxt">
+                            <td ng-click="ctrl.SelectedSite(site)">{{site.Description}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <button class="btn btn-danger" type="submit" data-ng-click="ctrl.Cancel()">Close</button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-panelMaintenance" class="popup-basic bg-none mfp-with-anim mfp-hide">
+        <div class="panel">
+            <!--Modal Header-->
+            <div class="panel-heading">
+                <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Update Target</span>
+            </div>
+            <div class="panel-body" style="height:450px; overflow-y:scroll">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">ID</label>
+                        <div class="col-md-4">
+                            <input id="idID" ng-enter="ctrl.keyDidID" ng-disabled="true" type="text" ng-model="ctrl.objTarget.ID " /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">TARGET DATE</label>
+                        <div class="col-md-4">
+                            <input id="idPDate" ng-enter="ctrl.keyDidPDate" ng-disabled="true" type="text" ng-model="ctrl.objTarget.TARGET_DATE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">GEO LEVEL1 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idGeo1" ng-enter="ctrl.keyDidGeo1" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.GEO_LEVEL1_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">GEO LEVEL2 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idGeo2" ng-enter="ctrl.keyDidGeo1" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.GEO_LEVEL2_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">GEO LEVEL3 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idGeo3" ng-enter="ctrl.keyDidGeo1" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.GEO_LEVEL3_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">STORE CODE</label>
+                        <div class="col-md-4">
+                            <input id="idStorecode" ng-enter="ctrl.keyDidStorecode" ng-disabled="true" type="text" ng-model="ctrl.objTarget.STORE_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PROD LEVEL1 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idPProd1" ng-enter="ctrl.keyDidPProd1" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.PROD_LEVEL1_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PROD LEVEL2 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idPProd2" ng-enter="ctrl.keyDidPProd2" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.PROD_LEVEL2_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PROD LEVEL3 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idPProd3" ng-enter="ctrl.keyDidPProd3" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.PROD_LEVEL3_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PROD LEVEL4 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idPProd4" ng-enter="ctrl.keyDidPProd4" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.PROD_LEVEL4_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PROD LEVEL5 CODE</label>
+                        <div class="col-md-4">
+                            <input id="idPProd5" ng-enter="ctrl.keyDidPProd5" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.PROD_LEVEL5_CODE" /> </br>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">PRODUCT CODE</label>
+                        <div class="col-md-4">
+                            <input id="idProduct" ng-enter="ctrl.keyDidProduct" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.PRODUCT_CODE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">TARGET SALE QTY</label>
+                        <div class="col-md-4">
+                            <input id="idForecastQty" ng-enter="ctrl.keyDidForecastQty" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.TARGET_SALE_QTY" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">TARGET SALE VAL AT PRICE</label>
+                        <div class="col-md-4">
+                            <input id="idForecastPrice" ng-enter="ctrl.keyDidForecastPrice" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.TARGET_SALE_VAL_AT_PRICE" /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">TARGET SALE VAL AT COST</label>
+                        <div class="col-md-4">
+                            <input id="idForecastCost" ng-enter="ctrl.keyDidForecastCost" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objTarget.TARGET_SALE_VAL_AT_COST " /> </br>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-md-3 control-label small">ARC DATE</label>
+                        <div class="col-md-4">
+                            <input id="idPArcDate" ng-enter="ctrl.keyDidPArcDate" ng-disabled="true" type="text" ng-model="ctrl.objTarget.ARC_DATE" /> </br>
+                        </div>
+                    </div>
+
+                    <button class='btn btn-primary pull-right' ng-disabled="ctrl.viewOnly" ng-show="ctrl.btnSave" ng-click="ctrl.Save()">Save</button>
+                    <button class='btn btn-primary pull-right' ng-disabled="ctrl.viewOnly" ng-show="ctrl.btnUpdate" ng-click="ctrl.Update()">Update</button>
+                </form>
+            </div>
+            <div class="panel-footer text-right">
+                <button class="btn btn-danger" type="submit" data-ng-click="ctrl.Cancel()">Close</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+

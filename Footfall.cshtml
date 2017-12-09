@@ -1,0 +1,249 @@
+﻿@{
+    Layout = null;
+}
+<style>
+
+    .posting {
+        /*max-height: 350px;
+                        display: block;
+                        width: 100%;
+                        table-layout: fixed;*/
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .posting-scroll tbody {
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .posting-scroll tr {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .posting-scroll td {
+        height: 47px;
+    }
+
+    .posting1 {
+        /*max-height: 350px;
+                        display: block;
+                        width: 100%;
+                        table-layout: fixed;*/
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .posting1-scroll tbody {
+        max-height: 350px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .posting1-scroll tr {
+        display: table;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .posting1-scroll td {
+        height: 47px;
+    }
+
+    .row-id {
+        width: 5%;
+    }
+
+
+
+    .row-Description {
+        width: 47%;
+    }
+
+    .row-Qty {
+        width: 20%;
+    }
+
+    .row-Action {
+        width: 20%;
+    }
+
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    .posting th {
+        background: #4ab5dd;
+        color: white;
+    }
+
+    .posting td,
+    .posting th {
+        text-align: left;
+        padding: 5px 10px;
+    }
+
+    .posting tr:nth-child(even) {
+        background: #fff;
+    }
+
+    .posting1 th {
+        background: #4ab5dd;
+        color: white;
+    }
+
+    .posting1 td,
+    .posting1 th {
+        text-align: left;
+        padding: 5px 10px;
+    }
+
+    .posting1 tr:nth-child(even) {
+        background: #fff;
+    }
+
+    th {
+        background-color: #e9573f !important;
+        color: #ffffff;
+    }
+</style>
+<section class="content" ng-init="ctrl.onInit(1)">
+   
+
+    <div ng-show="ctrl.listFootfall">
+        <div class="panel box-solid">
+            <div class="col-lg-12">
+                
+                <div class="form-inline">
+                    <h5>
+                        <input type="file" name="file" class="form-control"
+                               onchange="angular.element(this).scope().UploadFile(this.files)" style="    background: red;color: white;border-radius: 5px;" />
+                        <input type="button" value="Upload" class="btn btn-success" ng-disabled="!SelectedFileForUpload"
+                               ng-click="ParseExcelDataAndSave()" style="opacity: 2; background: red; border: red; border-radius: 5px;" />
+
+                        <button ng-show="canAdd" class="btn btn-rounded btn-danger pull-right" data-ng-click="ctrl.onAdd()">
+                            <span class="glyphicon glyphicon-plus">
+                            </span>
+                        </button>
+                    </h5>
+                </div>
+            </div>
+            <div id="exportable">
+                <table class="table table-striped dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">FOOTFALL DATE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">STORE CODE</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">FOOTFALL COUNT</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">ARC DATE</th>
+
+                    </tr>
+                    <tr ng-show="ctrl.FootfallList.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="Footfall in ctrl.FootfallList  |itemsPerPage: ctrl.itemsPerPage | filter:search:strict" total-items="ctrl.totalCount">
+
+                        <td>{{Footfall.FOOTFALL_DATE | date:'MM/dd/yyyy' }}</td>
+                        <td>{{Footfall.STORE_CODE}}</td>
+                        <td>{{Footfall.FOOTFALL_COUNT}}</td>
+                        <td>{{Footfall.ARC_DATE | date:'MM/dd/yyyy' }}</td>
+                </table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+
+    <div ng-show="!ctrl.listFootfall">
+        <div class="col-lg-6">
+            <a href="#" data-ng-click="ctrl.back()"><span class="btn-lg glyphicons glyphicons-rewind "></span></a>
+            <form class="form-horizontal" role="form" name="ctrl.formfootfall">
+                <div class="admin-form">
+                    <div class="section row mb10">
+                        <label for="footfalldate" class="field-label col-md-3 text-center">FOOTFALL DATE</label>
+
+                        <div class="col-md-3">
+                            <label for="footfall-date" id="footfalldate" class="field prepend-icon">
+                                <input type="text" class="form-control text-center" ng-model="ctrl.objFootfall.FOOTFALL_DATE" id="datetimepicker1">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="section row mb10">
+                        <label for="storecode" class="field-label col-md-3 text-center">Store Code</label>
+                        <div class="col-md-4">
+                            <div class="input-group date">
+                                <input id="idSite" type="text"
+                                       class="form-control"
+                                       placeholder=""
+                                       ng-model="ctrl.objFootfall.STORE_CODE"
+                                       ng-disabled="false" style="text-align:center">
+                                <span class="input-group-addon" ng-disabled="ctrl.viewOnly" ng-click="ctrl.showSite(site)">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="footfallcount" class="field-label col-md-3 text-center">Footfall Count</label>
+
+                        <div class="col-md-4">
+                            <label for="footfall-count" id="footfallcount" class="field prepend-icon">
+                                <input id="idFcount" class="form-control text-center" ng-enter="ctrl.keyDidLname" ng-disabled="ctrl.viewOnly" type="text" ng-model="ctrl.objFootfall.FOOTFALL_COUNT" /> </br>
+                            </label>
+                        </div>
+                    </div>
+                
+                    <button class='btn btn-rounded btn-danger pull-left' ng-disabled="ctrl.viewOnly" ng-show="ctrl.btnSave" ng-click="ctrl.Save()">Save</button>
+                    <button class='btn btn-rounded btn-danger pull-right' ng-disabled="ctrl.viewOnly" ng-show="ctrl.btnUpdate" ng-click="ctrl.Update()">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+</section>
+<div id="modal-panelMaintenananceList" class="popup-basic bg-none mfp-with-anim mfp-hide">
+    <div class="panel">
+        <!--Modal Header-->
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Site List</span>
+        </div>
+        <div class="panel-body" style="height:450px">
+            <div class='form-group form-group-sm'>
+                <input type='text' placeholder="Enter Site..." class='form-control' ng-model="ctrl.SiteTxt">
+            </div>
+            <div style="overflow:scroll; height:400px;">
+                <table class="table table-hover dataTable no-footer" context-menu data-target="menu-table">
+                    <tr>
+                        <th>Description</th>
+                    </tr>
+                    <tr ng-repeat="site in ctrl.siteList | filter:ctrl.SiteTxt">
+                        <td ng-click="ctrl.SelectedSite(site)">{{site.Description}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-danger" type="submit" data-ng-click="ctrl.Cancel()">Close</button>
+        </div>
+    </div>
+</div>

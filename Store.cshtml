@@ -1,0 +1,173 @@
+﻿@{
+    Layout = null;
+}
+
+<section class="content" ng-init="ctrl.onInit(1)">
+    <div ng-show="ctrl.listStore">
+        <div class="panel box-solid">
+            <div class="col-lg-12">
+                <h5>
+                    <input ng-model="ctrl.strSearch" type="text" placeholder="Enter Store..." ng-enter="ctrl.KeyDownSearch(ctrl.strSearch)" />
+                    <a data-ng-click="ctrl.refresh()" class="btn btn-sm btn-danger btn-sm pull-right " data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh">
+                        <span class="glyphicons glyphicons-refresh"></span>
+                    </a>
+                </h5>
+
+            </div>
+            <br />
+            <div id="exportable">
+                <table class="table table-striped  dataTable no-footer" id="datatable" cellspacing="0" width="100%" role="grid" aria-describedby="datatable_info" style="width: 100%;">
+                    <tr role="row">
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">Store</th>
+                        <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 45px;">Action</th>
+                    </tr>
+                    <tr ng-show="ctrl.storeList.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr dir-paginate="store in ctrl.storeList  |itemsPerPage: ctrl.itemsPerPage | filter:search:strict" total-items="ctrl.totalCount">
+                        <td>{{store.STORE_DESCRIPTION}}</td>
+                        <td><a ng-click="ctrl.onEdit(store)"><span class="glyphicon glyphicons-show_thumbnails"></span></a></td>
+                </table>
+            </div>
+            <dir-pagination-controls max-size="8" ng-hide="search.$.length > 0"
+                                     direction-links="true"
+                                     boundary-links="true"
+                                     on-page-change="ctrl.onInit(newPageNumber)">
+            </dir-pagination-controls>
+        </div>
+    </div>
+
+    <div ng-show="ctrl.displayEdit">
+        <a href="#" data-ng-click="ctrl.back()"><span class="btn-lg glyphicons glyphicons-rewind "></span></a>
+        <div class="col-lg-12">
+            <form class="form-horizontal" role="form">
+                <div class="admin-form">
+                    <div class="section row mb10">
+                        <label for="firstName" class="field-label col-md-3 text-center">Store Name:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="firstName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.STORE_DESCRIPTION" type="text" class="gui-input">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">Latitude:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="lastName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.STORE_LATITUDE" type="text" class="gui-input">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">Longitude:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="lastName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.STORE_LONGITUDE" type="text" class="gui-input">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">Opening Hour:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="lastName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.STORE_OPENING_HOUR" type="text" class="gui-input">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">Closing Hour:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="lastName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.STORE_CLOSING_HOUR" type="text" class="gui-input">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">SOM:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="lastName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.SOM_DESC" type="text" class="gui-input" data-ng-click="ctrl.selectSuperior('SOM')">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">Senior SOM:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="lastName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.SENIOR_SOM_DESC" type="text" class="gui-input"  data-ng-click="ctrl.selectSuperior('SENIORSOM')">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">Area Manager:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="lastName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.AREA_MANAGER_DESC" type="text" class="gui-input" data-ng-click="ctrl.selectSuperior('AREAMANAGER')">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">Regional Manager:</label>
+                        <div class="col-md-3">
+                            <label for="account-name" id="lastName" class="field prepend-icon">
+                                <input ng-model="ctrl.objStore.REGIONAL_MANAGER_DESC" type="text" class="gui-input" data-ng-click="ctrl.selectSuperior('REGIONALMANAGER')">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section row mb10">
+                        <label for="lastName" class="field-label col-md-3 text-center">Store DC:</label>
+           
+                        <div class="col-md-4">
+                            <select class="form-control col-md-4 "
+                                    placeholder=""
+                                    ng-model="ctrl.objStore.DC_STORE_CODE"
+                                    ng-options="item.DC_STORE_CODE as item.DC_STORE_DESCRIPTION for item in ctrl.listDc"></select>
+                        </div>
+                    </div>
+
+                    <button ng-show="canAdd" class="btn btn-rounded btn-danger pull-right" data-ng-click="ctrl.save()">
+                        SAVE
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+
+<div id="modalSuperior" class="popup-basic bg-none mfp-with-anim mfp-hide" style="max-width:90%;">
+    <div class="panel">
+        <!--Modal Header-->
+        <div class="panel-heading">
+            <span class="panel-title"><i class="glyphicon glyphicon-tasks"></i>Manager List</span>
+        </div>
+        <div class="panel-body" style="height:450px">
+            <div class='form-group form-group-sm'>
+                <input type='text' placeholder="Type  Name..." class='form-control' ng-model="ctrl.userTxt">
+            </div>
+            <div style="overflow:scroll; height:400px;">
+                <table class="table table-hover dataTable no-footer"
+                       context-menu data-target="menu-table">
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                    <tr ng-show="ctrl.userList.length <= 0"><td colspan="8" style="text-align:center;">NO data!!</td></tr>
+                    <tr ng-repeat="sup in ctrl.superiorList | filter:ctrl.userTxt ">
+                        <td ng-click="ctrl.selectedSuperior(sup)">{{sup.Name}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <button class="btn btn-danger" type="submit" data-ng-click="ctrl.Close()">Close</button>
+        </div>
+    </div>
+</div>
